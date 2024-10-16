@@ -9,16 +9,19 @@
 int time_green_set = 3;
 int time_yellow_set = 2;
 int time_red_set = 6;
-int time_init = 4;
+int time_init = 3;
 int time_1 = 5;
 int	time_2 = 5;
 uint8_t redred ;
 int time_red_select ;
 int time_green_select;
 int time_yellow_select = 0;
+/*
+# define LED_OFF SET
+# define LED_ON RESET
+ */
 # define LED_OFF RESET
 # define LED_ON SET
-
 void traffic_double_display(GPIO_TypeDef * GPIOx1, uint16_t LED_RED1, uint16_t LED_YELLOW1, uint16_t LED_GREEN1,
                             GPIO_TypeDef * GPIOx2, uint16_t LED_RED2, uint16_t LED_YELLOW2, uint16_t LED_GREEN2, int status) {
     switch(status) {
@@ -43,12 +46,12 @@ void traffic_double_display(GPIO_TypeDef * GPIOx1, uint16_t LED_RED1, uint16_t L
             traffic_display(GPIOx2, LED_RED2, LED_YELLOW2, LED_GREEN2, YELLOW);
             break;
         case INIT:
-            HAL_GPIO_WritePin(GPIOx1, LED_RED1, LED_ON);
-            HAL_GPIO_WritePin(GPIOx1, LED_YELLOW1, LED_ON);
-            HAL_GPIO_WritePin(GPIOx1, LED_GREEN1, LED_ON);
-            HAL_GPIO_WritePin(GPIOx2, LED_RED2, LED_ON);
-            HAL_GPIO_WritePin(GPIOx2, LED_YELLOW2, LED_ON);
-            HAL_GPIO_WritePin(GPIOx2, LED_GREEN2, LED_ON);
+            HAL_GPIO_WritePin(GPIOx1, LED_RED1, LED_OFF);
+            HAL_GPIO_WritePin(GPIOx1, LED_YELLOW1, LED_OFF);
+            HAL_GPIO_WritePin(GPIOx1, LED_GREEN1, LED_OFF);
+            HAL_GPIO_WritePin(GPIOx2, LED_RED2, LED_OFF);
+            HAL_GPIO_WritePin(GPIOx2, LED_YELLOW2, LED_OFF);
+            HAL_GPIO_WritePin(GPIOx2, LED_GREEN2, LED_OFF);
             break;
         case RED_RED1:
     //	    case RED_RED2:

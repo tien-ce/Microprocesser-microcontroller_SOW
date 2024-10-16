@@ -5,10 +5,10 @@
  *      Author: thuyh
  */
 #include "automatic.h"
+
 void automatic_init(){
-	if(status == INIT){
-		setTimer1(1, 1000);
-	}
+	time_1 = time_init;
+	time_2 = time_init;
 }
 void automatic_run(){
  	switch(status)
