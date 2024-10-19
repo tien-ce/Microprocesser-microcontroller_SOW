@@ -6,7 +6,7 @@
  */
 
 	#include "i2c_slave.h"
-	extern I2C_HandleTypeDef hi2c1;
+
 	#define RxSize 6
 	uint8_t Rxdata[RxSize];
 	void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c){

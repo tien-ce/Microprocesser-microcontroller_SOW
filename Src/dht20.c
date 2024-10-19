@@ -43,14 +43,14 @@ uint8_t DHT20_RequestData(DHT20_t *dht20) {
 
 uint8_t DHT20_ReadData(DHT20_t *dht20) {
     uint8_t length = 7;
-    if (HAL_I2C_Master_Receive(dht20->hi2c, Slave_address_dht20 << 1, dht20->bits, length, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Receive(dht20->hi2c, Slave_address_dht20 << 1, dht20->bytes, length, HAL_MAX_DELAY) != HAL_OK) {
         return DHT20_ERROR_CONNECT;
     }
 
     // Kiểm tra nếu tất cả các byte đều bằng 0
     uint8_t allZero = 1;
     for (int i = 0; i < length; i++) {
-        if (dht20->bits[i] != 0) {
+        if (dht20->bytes[i] != 0) {
             allZero = 0;
             break;
         }
@@ -58,23 +58,23 @@ uint8_t DHT20_ReadData(DHT20_t *dht20) {
     if (allZero) return DHT20_ERROR_BYTES_ALL_ZERO;
 
     dht20->lastRead = HAL_GetTick();
-    return length;
+    return DHT20_OK;
 }
 
 uint8_t DHT20_Convert(DHT20_t *dht20) {
-    dht20->status = dht20->bits[0];
+    dht20->status = dht20->bytes[0];
 
     // Chuyển đổi độ ẩm
-    uint32_t rawHumidity = (dht20->bits[1] << 12) | (dht20->bits[2] << 4) | (dht20->bits[3] >> 4);
+    uint32_t rawHumidity = (dht20->bytes[1] << 12) | (dht20->bytes[2] << 4) | (dht20->bytes[3] >> 4);
     dht20->humidity = rawHumidity * 9.5367431640625e-5; // Chuyển đổi theo công thức datasheet
 
     // Chuyển đổi nhiệt độ
-    uint32_t rawTemperature = ((dht20->bits[3] & 0x0F) << 16) | (dht20->bits[4] << 8) | dht20->bits[5];
+    uint32_t rawTemperature = ((dht20->bytes[3] & 0x0F) << 16) | (dht20->bytes[4] << 8) | dht20->bytes[5];
     dht20->temperature = rawTemperature * 1.9073486328125e-4 - 50; // Chuyển đổi theo công thức datasheet
 
     // Kiểm tra CRC
-    uint8_t crc = DHT20_CRC8(dht20->bits, 6);
-    if (crc != dht20->bits[6]) {
+    uint8_t crc = DHT20_CRC8(dht20->bytes, 6);
+    if (crc != dht20->bytes[6]) {
         return DHT20_ERROR_CHECKSUM;
     }
 

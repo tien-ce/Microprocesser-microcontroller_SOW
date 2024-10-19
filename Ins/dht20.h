@@ -4,20 +4,22 @@
 	 *  Created on: Oct 12, 2024
 	 *      Author: thuyh
 	 */
-
 	#ifndef INS_DHT20_H_
 	#define INS_DHT20_H_
 	#include "main.h"
 	#include "i2c_master.h"
 	#include "stdio.h"
 	#include "stdlib.h"
-	#define DHT20_OK                             0 //Trạng thái không có lỗi, mọi thứ hoạt động tốt.
-	#define DHT20_ERROR_CHECKSUM                -10 //Lỗi khi kiểm tra tổng kiểm (checksum) không khớp.
-	#define DHT20_ERROR_CONNECT                 -11//Lỗi khi không thể kết nối với cảm biến.
-	#define DHT20_MISSING_BYTES                 -12// Lỗi do thiếu dữ liệu từ cảm biến.
-	#define DHT20_ERROR_BYTES_ALL_ZERO          -13//Lỗi khi tất cả các byte dữ liệu đọc từ cảm biến đều bằng 0.
-	#define DHT20_ERROR_READ_TIMEOUT            -14//Lỗi khi quá trình đọc dữ liệu bị quá thời gian quy định.
-	#define DHT20_ERROR_LASTREAD                -15 //Lỗi liên quan đến lần đọc cuối cùng từ cảm biến.
+typedef enum {
+	DHT20_OK                   , //Trạng thái không có lỗi, mọi thứ hoạt động tốt
+    DHT20_ERROR_CHECKSUM       , // Lỗi khi kiểm tra tổng kiểm (checksum) không khớp.
+    DHT20_ERROR_CONNECT        , // Lỗi khi không thể kết nối với cảm biến.
+    DHT20_MISSING_BYTES        , // Lỗi do thiếu dữ liệu từ cảm biến.
+    DHT20_ERROR_BYTES_ALL_ZERO , // Lỗi khi tất cả các byte dữ liệu đọc từ cảm biến đều bằng 0.
+    DHT20_ERROR_READ_TIMEOUT   , // Lỗi khi quá trình đọc dữ liệu bị quá thời gian quy định.
+    DHT20_ERROR_LASTREAD         // Lỗi liên quan đến lần đọc cuối cùng từ cảm biến.
+} status_dht20;
+
 	typedef struct {
 		I2C_HandleTypeDef *hi2c;  // Giao tiếp I2C được sử dụng
 		float humidity; // Độ ẩm
@@ -27,7 +29,7 @@
 		uint8_t status; // Trạng thái của cảm biến
 		uint32_t lastRequest; // Thời gian (đếm theo ms) của lần yêu cầu đo cuối cùng từ cảm biến.
 		uint32_t lastRead; //Thời gian (đếm theo ms) của lần đọc dữ liệu cuối cùng từ cảm biến.
-		uint8_t bits[7];// Mảng nhận dữ liệu
+		uint8_t bytes[7];// Mảng nhận dữ liệu
 	} DHT20_t;
 
 	// Hàm khởi tạo cảm biến DHT20 với giao tiếp I2C
@@ -43,16 +45,16 @@
 	uint8_t DHT20_GetAddress();
 
 	// Gửi yêu cầu thu thập dữ liệu từ cảm biến. Trả về 0 nếu thành công hoặc mã lỗi nếu không.
-	uint8_t DHT20_RequestData(DHT20_t *dht20);
+	status_dht20 DHT20_RequestData(DHT20_t *dht20);
 
 	// Đọc dữ liệu thô từ cảm biến sau khi yêu cầu đọc được gửi. Trả về 0 nếu thành công hoặc mã lỗi nếu không.
-	uint8_t DHT20_ReadData(DHT20_t *dht20);
+	status_dht20 DHT20_ReadData(DHT20_t *dht20);
 
 	// Chuyển đổi dữ liệu thô nhận được từ cảm biến thành dữ liệu có ý nghĩa (nhiệt độ và độ ẩm). Trả về 0 nếu thành công hoặc mã lỗi nếu không.
-	uint8_t DHT20_Convert(DHT20_t *dht20);
+	status_dht20 DHT20_Convert(DHT20_t *dht20);
 
 	// Gọi hàm để đọc và chuyển đổi dữ liệu từ cảm biến. Trả về 0 nếu thành công hoặc mã lỗi nếu không.
-	uint8_t DHT20_Read(DHT20_t *dht20);
+	status_dht20 DHT20_Read(DHT20_t *dht20);
 
 	// Trả về giá trị độ ẩm hiện tại đo được từ cảm biến (đã chuyển đổi từ dữ liệu thô).
 	float DHT20_GetHumidity(DHT20_t *dht20);
@@ -80,9 +82,6 @@
 
 	// Kiểm tra xem cảm biến DHT20 có đang đo đạc dữ liệu hay không. Trả về true nếu có, false nếu không.
 	uint8_t DHT20_IsMeasuring(DHT20_t *dht20);
-
-	// Kiểm tra xem cảm biến có đang ở trạng thái nhàn rỗi (idle) hay không. Trả về true nếu có, false nếu không.
-	uint8_t DHT20_IsIdle(DHT20_t *dht20);
 
 	// Trả về trạng thái nội bộ của cảm biến DHT20 (trạng thái cuối cùng sau lần đọc gần nhất).
 	uint8_t DHT20_InternalStatus(DHT20_t *dht20);

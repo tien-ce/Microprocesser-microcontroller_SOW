@@ -10,6 +10,7 @@ void automatic_init(){
 	time_1 = time_init;
 	time_2 = time_init;
 }
+
 void automatic_run(){
  	switch(status)
 	{

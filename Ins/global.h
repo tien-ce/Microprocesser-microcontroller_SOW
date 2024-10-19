@@ -13,6 +13,8 @@
 #include "input_reading.h"
 #include "input_processing.h"
 #include "enable.h"
+#include "dht20.h"
+#include "i2c_master.h"
 #ifndef INS_GLOBAL_H_
 #define INS_GLOBAL_H_
 extern int status;
