@@ -15,7 +15,7 @@ void automatic_run(){
  	switch(status)
 	{
 	case (INIT):
-				traffic_init();
+			traffic_init();
 			break;
 	case (GREEN_RED):
 			// TODO
@@ -27,15 +27,14 @@ void automatic_run(){
 	case RED_RED1:
 				traffic_red_red1();
 			break;
+
 	case (RED_GREEN):
 				traffic_red_green();
 			break;
 	case (RED_YELLOW):
 				traffic_red_yellow();
 			break;
-	//case RED_RED2:
-		//		traffic_red_red2();
-			//break;
+
 	default:
 		break;
 	}

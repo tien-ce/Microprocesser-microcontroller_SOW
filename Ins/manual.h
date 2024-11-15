@@ -1,14 +1,14 @@
 /*
- * munual.h
+ * manual.h
  *
- *  Created on: Sep 23, 2024
+ *  Created on: Nov 10, 2024
  *      Author: thuyh
  */
 
 #ifndef INS_MANUAL_H_
 #define INS_MANUAL_H_
-#include "main.h"
+
 #include "global.h"
-void manual_init();
+# define TIME_OUT_RESET 10000
 void manual_run();
-#endif /* INS_MUNUAL_H_ */
+#endif /* INS_MANUAL_H_ */

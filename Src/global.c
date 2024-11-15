@@ -6,4 +6,4 @@
  */
 #include "global.h"
 int status = INIT ;
-
+int isAutoToMan = 0;
